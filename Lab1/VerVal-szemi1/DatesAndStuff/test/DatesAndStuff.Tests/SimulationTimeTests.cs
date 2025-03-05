@@ -53,14 +53,19 @@ namespace DatesAndStuff.Tests
                 var time1 = new SimulationTime(new DateTime(2023, 1, 1, 12, 0, 0));
                 var time2 = new SimulationTime(new DateTime(2023, 1, 1, 12, 0, 0));
                 var time3 = new SimulationTime(new DateTime(2023, 1, 1, 13, 0, 0));
+                var time4 = new SimulationTime(new DateTime(2023, 1, 1, 11, 0, 0));
                 
                 // Act & Assert
                 Assert.AreEqual(time1, time2, "Expected time1 to be equal to time2");
                 Assert.AreNotEqual(time1, time3, "Expected time1 to not be equal to time3");
                 Assert.IsTrue(time1 < time3, "Expected time1 to be less than time3");
                 Assert.IsTrue(time3 > time1, "Expected time3 to be greater than time1");
+                Assert.IsTrue(time4 <= time1, "Expected time4 to be less than or equal to time1");
+                Assert.IsTrue(time3 >= time1, "Expected time3 to be greater than or equal to time1");
                 Assert.IsTrue(time1 <= time2, "Expected time1 to be less than or equal to time2");
-                Assert.IsTrue(time3 >= time2, "Expected time3 to be greater than or equal to time2");
+                Assert.IsTrue(time1 >= time2, "Expected time1 to be greater than or equal to time2");
+                Assert.AreEqual(SimulationTime.MaxValue, SimulationTime.MaxValue, "Expected MaxValue to be equal to itself");
+                Assert.AreEqual(SimulationTime.MinValue, SimulationTime.MinValue, "Expected MinValue to be equal to itself");
             }
         }
         
