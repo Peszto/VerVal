@@ -49,7 +49,18 @@ namespace DatesAndStuff.Tests
             // min
             public void SimulationTime_Should_SupportComparisonOperators()
             {
-                throw new NotImplementedException();
+                // Arrange
+                var time1 = new SimulationTime(new DateTime(2023, 1, 1, 12, 0, 0));
+                var time2 = new SimulationTime(new DateTime(2023, 1, 1, 12, 0, 0));
+                var time3 = new SimulationTime(new DateTime(2023, 1, 1, 13, 0, 0));
+                
+                // Act & Assert
+                Assert.AreEqual(time1, time2, "Expected time1 to be equal to time2");
+                Assert.AreNotEqual(time1, time3, "Expected time1 to not be equal to time3");
+                Assert.IsTrue(time1 < time3, "Expected time1 to be less than time3");
+                Assert.IsTrue(time3 > time1, "Expected time3 to be greater than time1");
+                Assert.IsTrue(time1 <= time2, "Expected time1 to be less than or equal to time2");
+                Assert.IsTrue(time3 >= time2, "Expected time3 to be greater than or equal to time2");
             }
         }
         
