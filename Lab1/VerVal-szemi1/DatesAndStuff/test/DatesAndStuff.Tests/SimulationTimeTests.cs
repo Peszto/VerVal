@@ -1,3 +1,5 @@
+using FluentAssertions;
+
 namespace DatesAndStuff.Tests
 {
     public sealed class SimulationTimeTests
@@ -30,7 +32,12 @@ namespace DatesAndStuff.Tests
             // Default time is not current time.
             public void DefaultConstructor_CreatesTimeNotEqualToCurrentTime()
             {
-                throw new NotImplementedException();
+                // Arrange
+                var sut = new SimulationTime();
+                // Act
+                var result = sut.ToAbsoluteDateTime();
+                // Assert
+                result.Should().NotBe(DateTime.Now);
             }
         }
         
@@ -88,7 +95,7 @@ namespace DatesAndStuff.Tests
                 var result = sut + ts;
                 // Assert
                 var expectedDateTime = baseDate + ts;
-                Assert.AreEqual(expectedDateTime, result.ToAbsoluteDateTime());
+                result.ToAbsoluteDateTime().Should().Be(expectedDateTime);
             }
 
             [Test]
@@ -97,7 +104,15 @@ namespace DatesAndStuff.Tests
             // RegisterOrder_SignedInUserSendsOrder_OrderIsRegistered
             public void SimulationTime_Should_AllowSubtraction()
             {
-                throw new NotImplementedException();
+                // Arrange
+                var simulationTime1 = SimulationTime.MinValue.AddMilliseconds(500);
+                var simulationTime2 = SimulationTime.MinValue.AddMilliseconds(1000);
+
+                // Act
+                var resultTimeSpan = simulationTime2 - simulationTime1;
+
+                // Assert
+                resultTimeSpan.Should().Be(TimeSpan.FromMilliseconds(500));
             }
         }
         
@@ -107,7 +122,15 @@ namespace DatesAndStuff.Tests
             // simulation difference timespane and datetimetimespan is the same
             public void TwoSimulationTimes_Subtracting_ProduceCorrectTimespan()
             {
-                throw new NotImplementedException();
+                // Arrange
+                var simulationTime1 = SimulationTime.MinValue.AddMilliseconds(500);
+                var simulationTime2 = SimulationTime.MinValue.AddMilliseconds(1000);
+
+                // Act
+                var resultTimeSpan = simulationTime2 - simulationTime1;
+
+                // Assert
+                resultTimeSpan.Should().Be(TimeSpan.FromMilliseconds(500));
             }
         }
         
@@ -124,7 +147,7 @@ namespace DatesAndStuff.Tests
                 var expectedTime = SimulationTime.MinValue + TimeSpan.FromMilliseconds(10);
 
                 // Assert
-                Assert.That(t1, Is.EqualTo(expectedTime));
+                t1.Should().Be(expectedTime);
             }
 
             [Test]
@@ -138,7 +161,7 @@ namespace DatesAndStuff.Tests
                 var t2 = t1.NextMillisec;
 
                 // Assert
-                Assert.That(t2.TotalMilliseconds, Is.EqualTo(t1.TotalMilliseconds + 1));
+                t2.TotalMilliseconds.Should().Be(t1.TotalMilliseconds + 1);
             }
 
             [Test]
@@ -155,9 +178,7 @@ namespace DatesAndStuff.Tests
                 var newSimulationTime = simulationTime.AddMilliseconds(millisecondsToAdd);
 
                 // Assert
-                // Allow a small tolerance to account for any possible minor precision differences
-                Assert.That(newSimulationTime.ToAbsoluteDateTime(), 
-                    Is.EqualTo(newDateTime).Within(TimeSpan.FromMilliseconds(1)));
+                newSimulationTime.ToAbsoluteDateTime().Should().BeCloseTo(newDateTime, TimeSpan.FromMilliseconds(1));
            }
         }
         
@@ -167,14 +188,30 @@ namespace DatesAndStuff.Tests
             // the same as before just with seconds
             public void SimulationTime_AddingSeconds_ShiftsTimeCorrectly()
             {
-                throw new NotImplementedException();
+                // Arrange
+                var simulationTime = SimulationTime.MinValue;
+                int secondsToAdd = 5;
+                
+                // Act
+                var newSimulationTime = simulationTime.AddSeconds(secondsToAdd);
+
+                // Assert
+                newSimulationTime.TotalMilliseconds.Should().Be(simulationTime.TotalMilliseconds + (secondsToAdd * 1000));
             }
 
             [Test]
             // same as before just with timespan
             public void SimulationTime_Should_SupportTimeSpanAddition()
             {
-                throw new NotImplementedException();
+                // Arrange
+                var simulationTime = SimulationTime.MinValue;
+                var timeSpanToAdd = TimeSpan.FromMinutes(10);
+
+                // Act
+                var newSimulationTime = simulationTime.AddTimeSpan(timeSpanToAdd);
+
+                // Assert
+                newSimulationTime.TotalMilliseconds.Should().Be((long)(simulationTime.TotalMilliseconds + timeSpanToAdd.TotalMilliseconds));
             }
         }
         
@@ -192,7 +229,7 @@ namespace DatesAndStuff.Tests
                 var stringRepresentation = simulationTime.ToString();
 
                 // Assert
-                Assert.That(stringRepresentation, Is.EqualTo(dateTime.ToIsoStringFast()));
+                stringRepresentation.Should().Be(dateTime.ToIsoStringFast());
             }
         }
     }

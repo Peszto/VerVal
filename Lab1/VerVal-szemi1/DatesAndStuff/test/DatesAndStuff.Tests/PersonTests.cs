@@ -49,7 +49,7 @@ public class PersonTests
             try { task.Wait(); } catch { }
 
             // Assert
-            Assert.IsTrue(task.IsFaulted);
+            task.IsFaulted.Should().BeTrue();
         }
     }
 
@@ -68,7 +68,7 @@ public class PersonTests
             sut.IncreaseSalary(increasePercent);
 
             // Assert
-            Assert.AreEqual(expectedSalary, sut.Salary);
+            sut.Salary.Should().Be(expectedSalary);
         }
 
         [Test]
@@ -81,7 +81,7 @@ public class PersonTests
             sut.IncreaseSalary(0);
 
             // Assert
-            Assert.AreEqual(initialSalary, sut.Salary);
+            sut.Salary.Should().Be(initialSalary);
         }
 
         [Test]
@@ -96,7 +96,7 @@ public class PersonTests
             sut.IncreaseSalary(decreasePercent);
 
             // Assert
-            Assert.AreEqual(expectedSalary, sut.Salary);
+            sut.Salary.Should().Be(expectedSalary);
         }
 
         [Test]
@@ -106,7 +106,8 @@ public class PersonTests
             double decreasePercent = -11; // More than 10% decrease
 
             // Act & Assert
-            Assert.Throws<ArgumentOutOfRangeException>(() => sut.IncreaseSalary(decreasePercent));
+            Action act = () => sut.IncreaseSalary(decreasePercent);
+            act.Should().Throw<ArgumentOutOfRangeException>();
         }
     }
 }
