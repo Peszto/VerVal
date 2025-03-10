@@ -117,24 +117,48 @@ namespace DatesAndStuff.Tests
             // millisecond representation works
             public void SimulationTime_Should_SupportMillisecondRepresentation()
             {
-                //var t1 = SimulationTime.MinValue.AddMilliseconds(10);
-                throw new NotImplementedException();
+                // Arrange
+                var t1 = SimulationTime.MinValue.AddMilliseconds(10);
+
+                // Act
+                var expectedTime = SimulationTime.MinValue + TimeSpan.FromMilliseconds(10);
+
+                // Assert
+                Assert.That(t1, Is.EqualTo(expectedTime));
             }
 
             [Test]
             // next millisec calculation works
             public void SimulationTime_IncrementingByMillisecond_UpdatesCorrectly()
             {
-                //Assert.AreEqual(t1.TotalMilliseconds + 1, t1.NextMillisec.TotalMilliseconds);
-                throw new NotImplementedException();
+                // Arrange
+                var t1 = SimulationTime.MinValue;
+
+                // Act
+                var t2 = t1.NextMillisec;
+
+                // Assert
+                Assert.That(t2.TotalMilliseconds, Is.EqualTo(t1.TotalMilliseconds + 1));
             }
 
             [Test]
             // creat a SimulationTime from a DateTime, add the same milliseconds to both and check if they are still equal
             public void SimulationTime_Should_AllowAddingMilliseconds()
             {
-                throw new NotImplementedException();
-            }
+                // Arrange
+                var dateTime = DateTime.UtcNow;
+                var simulationTime = new SimulationTime(dateTime);
+                int millisecondsToAdd = 500;
+
+                // Act
+                var newDateTime = dateTime.AddMilliseconds(millisecondsToAdd);
+                var newSimulationTime = simulationTime.AddMilliseconds(millisecondsToAdd);
+
+                // Assert
+                // Allow a small tolerance to account for any possible minor precision differences
+                Assert.That(newSimulationTime.ToAbsoluteDateTime(), 
+                    Is.EqualTo(newDateTime).Within(TimeSpan.FromMilliseconds(1)));
+           }
         }
         
         public class TimeManipulationTests
@@ -160,7 +184,15 @@ namespace DatesAndStuff.Tests
             // check string representation given by ToString
             public void SimulationTime_ConvertingToString_ProducesCorrectRepresentation()
             {
-                throw new NotImplementedException();
+                // Arrange
+                var dateTime = DateTime.Now;
+                var simulationTime = new SimulationTime(dateTime);
+
+                // Act
+                var stringRepresentation = simulationTime.ToString();
+
+                // Assert
+                Assert.That(stringRepresentation, Is.EqualTo(dateTime.ToIsoStringFast()));
             }
         }
     }
