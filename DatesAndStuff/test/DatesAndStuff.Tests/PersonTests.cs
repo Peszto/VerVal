@@ -9,7 +9,7 @@ public class PersonTests
     [SetUp]
     public void Setup()
     {
-        this.sut = new Person("Test Pista", 54);
+        this.sut = PersonFactory.CreateTestPerson();
     }
 
     public class MarriageTests : PersonTests
