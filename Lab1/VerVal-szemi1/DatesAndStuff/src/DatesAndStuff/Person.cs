@@ -7,23 +7,46 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-[assembly:InternalsVisibleTo("DatesAndStuff.Tests")]
+[assembly: InternalsVisibleTo("DatesAndStuff.Tests")]
 
 namespace DatesAndStuff
 {
-    
-    internal class Person
+    public class Person
     {
         private bool married = false;
 
         public string Name { get; private set; }
 
-        public double Salary { get; private set; }
+        public double Salary => Employment.Salary;
 
-        public Person(string name, double salary) {
+        public EmploymentInformation Employment { get; private set; }
+
+        public IPaymentService PreferredPayment { get; private set; }
+
+        public LocalTaxData TaxData { get; private set; }
+
+        public readonly bool CanEatGluten;
+
+        public readonly bool CanEatLactose;
+
+        public readonly bool CanEatEgg;
+
+        public readonly bool CanEatChocolate;
+
+        public const double SubscriptionFee = 500;
+
+        public Person(string name, EmploymentInformation employment, IPaymentService paymentService, LocalTaxData taxData, FoodPreferenceParams foodPreferenceParams)
+        {
             this.Name = name;
-            this.Salary = salary;
             this.married = false;
+            this.Employment = employment;
+            this.PreferredPayment = paymentService;
+            this.TaxData = taxData;
+            this.CanEatGluten = foodPreferenceParams.CanEatGluten;
+            this.CanEatLactose = foodPreferenceParams.CanEatLactose;
+            this.CanEatEgg = foodPreferenceParams.CanEatEgg;
+            this.CanEatChocolate = foodPreferenceParams.CanEatChocolate;
+
         }
 
         public void GotMarried(string newName)
@@ -37,15 +60,31 @@ namespace DatesAndStuff
 
         public void IncreaseSalary(double percentage)
         {
-            if (percentage <= -10 )
-                throw new ArgumentOutOfRangeException(nameof(percentage));
-
-            this.Salary = this.Salary * (1 + percentage / 100);
+            Employment.IncreaseSalary(percentage);
         }
 
         public static Person Clone(Person p)
         {
-            return new Person(p.Name, p.Salary);
+            return new Person(p.Name,
+                new EmploymentInformation(p.Employment.Salary, p.Employment.Employer.Clone()),
+                p.PreferredPayment,
+                p.TaxData,
+                new FoodPreferenceParams
+                {
+                    CanEatGluten = p.CanEatGluten,
+                    CanEatEgg = p.CanEatEgg,
+                    CanEatChocolate = p.CanEatChocolate,
+                    CanEatLactose = p.CanEatLactose
+                }
+               );
+        }
+
+        public bool PerformSubsriptionPayment()
+        {
+            PreferredPayment.StartPayment();
+            PreferredPayment.SpecifyAmount(SubscriptionFee);
+            PreferredPayment.ConfirmPayment();
+            return true;
         }
     }
 }
