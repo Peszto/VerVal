@@ -72,34 +72,6 @@ public class PersonTests
         }
 
         [Test]
-        public void IncreaseSalary_ZeroPercentIncrease_ShouldNotChange()
-        {
-            // Arrange
-            double initialSalary = sut.Salary;
-
-            // Act
-            sut.IncreaseSalary(0);
-
-            // Assert
-            sut.Salary.Should().Be(initialSalary);
-        }
-
-        [Test]
-        public void IncreaseSalary_NegativeIncrease_ShouldDecrease()
-        {
-            // Arrange
-            double initialSalary = sut.Salary;
-            double decreasePercent = -5; // 5% decrease
-            double expectedSalary = initialSalary * 0.95;
-
-            // Act
-            sut.IncreaseSalary(decreasePercent);
-
-            // Assert
-            sut.Salary.Should().Be(expectedSalary);
-        }
-
-        [Test]
         public void IncreaseSalary_SmallerThanMinusTenPerc_ShouldFail()
         {
             // Arrange
@@ -109,5 +81,79 @@ public class PersonTests
             Action act = () => sut.IncreaseSalary(decreasePercent);
             act.Should().Throw<ArgumentOutOfRangeException>();
         }
+
+        // [Test]
+        // [CustomPersonCreationAutodataAttribute]
+        // public void IncreaseSalary_ReasonableValue_ShouldModifySalary(Person sut, double salaryIncreasePercentage)
+        // {
+        //     // Arrange
+        //     double initialSalary = sut.Salary;
+
+        //     // Act
+        //     sut.IncreaseSalary(salaryIncreasePercentage);
+
+        //     // Assert
+        //     sut.Salary.Should().BeApproximately(initialSalary * (100 + salaryIncreasePercentage) / 100, Math.Pow(10, -8), because: "numerical salary calculation might be rounded to conform legal stuff");
+        // }
+
+        [TestCase(0)]
+        [TestCase(10)] 
+        [TestCase(20)] 
+        [TestCase(50)]
+        [TestCase(-9)] 
+        public void IncreaseSalary_ReasonableValue_ShouldModifySalary(double salaryIncreasePercentage)
+        {
+            // Arrange
+            double initialSalary = sut.Salary;
+            double expectedSalary = initialSalary * (1 + salaryIncreasePercentage / 100);
+
+            // Act
+            sut.IncreaseSalary(salaryIncreasePercentage);
+
+            // Assert
+            sut.Salary.Should().BeApproximately(expectedSalary, 0.00000001, "Salary increase calculation failed");
+        }
+
+        
+        [TestCase(-10)]
+        [TestCase(-50)]
+        public void IncreaseSalary_InvalidValues_ShouldThrowException(double salaryIncreasePercentage)
+        {
+            // Arrange & Act
+            Action act = () => sut.IncreaseSalary(salaryIncreasePercentage);
+
+            // Assert
+            act.Should().Throw<ArgumentOutOfRangeException>(nameof(salaryIncreasePercentage));
+        }
     }
+
+
+    public class ConstructorTest : PersonTests
+    {
+        [Test]
+        public void Constructor_DefaultParams_ShouldBeAbleToEatChocolate()
+        {
+            // Arrange
+
+            // Act
+            Person sut = PersonFactory.CreateTestPerson();
+
+            // Assert
+            sut.CanEatChocolate.Should().BeTrue();
+        }
+
+        [Test]
+        public void Constructor_DontLikeChocolate_ShouldNotBeAbleToEatChocolate()
+        {
+            // Arrange
+
+            // Act
+            Person sut = PersonFactory.CreateTestPerson(fp => fp.CanEatChocolate = false);
+
+            // Assert
+            sut.CanEatChocolate.Should().BeFalse();
+        }
+    }
+
+
 }
