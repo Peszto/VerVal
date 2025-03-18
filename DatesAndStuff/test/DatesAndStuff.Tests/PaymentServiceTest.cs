@@ -31,7 +31,7 @@ namespace DatesAndStuff.Tests
             );
 
             // Act
-            bool result = sut.PerformSubsriptionPayment();
+            bool result = sut.PerformSubscriptionPayment();
 
             // Assert
             result.Should().BeTrue();
@@ -67,7 +67,7 @@ namespace DatesAndStuff.Tests
             );
 
             // Act
-            bool result = sut.PerformSubsriptionPayment();
+            bool result = sut.PerformSubscriptionPayment();
 
             // Assert
             result.Should().BeTrue();
@@ -83,7 +83,7 @@ namespace DatesAndStuff.Tests
             // Arrange
 
             // Act
-            bool result = sut.PerformSubsriptionPayment();
+            bool result = sut.PerformSubscriptionPayment();
 
             // Assert
             result.Should().BeTrue();

@@ -46,7 +46,6 @@ namespace DatesAndStuff
             this.CanEatLactose = foodPreferenceParams.CanEatLactose;
             this.CanEatEgg = foodPreferenceParams.CanEatEgg;
             this.CanEatChocolate = foodPreferenceParams.CanEatChocolate;
-
         }
 
         public void GotMarried(string newName)
@@ -79,13 +78,13 @@ namespace DatesAndStuff
                );
         }
 
-        public bool PerformSubsriptionPayment()
+        public bool PerformSubscriptionPayment()
         {
             PreferredPayment.StartPayment();
-            double currentBalance = PreferredPayment.Balance();
+            double currentBalance = PreferredPayment.GetBalance();
             if (currentBalance < SubscriptionFee)
             {
-                PreferredPayment.CancelPayment();
+                PreferredPayment.Cancel();
                 return false;
             }
             PreferredPayment.SpecifyAmount(SubscriptionFee);
