@@ -9,6 +9,16 @@ internal class TestPaymentService : IPaymentService
     uint cancelCallCount = 0;
     private double balance = 1000; 
 
+    public bool StartCalled => startCallCount > 0;
+    public bool SpecifyCalled => specifyCallCount > 0;
+    public bool ConfirmCalled => confirmCallCount > 0;
+    public bool CancelCalled => cancelCallCount > 0;
+
+    public TestPaymentService(double balance)
+    {
+        this.balance = balance;
+    }
+
     public void StartPayment()
     {
         if (startCallCount != 0 || specifyCallCount > 0 || confirmCallCount > 0 || cancelCallCount > 0)
