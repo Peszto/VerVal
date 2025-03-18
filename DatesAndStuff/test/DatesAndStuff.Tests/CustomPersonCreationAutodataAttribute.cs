@@ -5,29 +5,45 @@ using Moq;
 
 namespace DatesAndStuff.Tests
 {
-    internal class CustomPersonCreationAutodataAttribute : AutoDataAttribute
+
+    internal class SufficientBalancePersonCreationAutodataAttribute : AutoDataAttribute
     {
-        public CustomPersonCreationAutodataAttribute()
-        : base(() =>
-        {
-            var fixture = new Fixture();
+        public SufficientBalancePersonCreationAutodataAttribute()
+            : base(() =>
+            {
+                var fixture = new Fixture();
 
-            fixture.Customize(new AutoMoqCustomization());
+                fixture.Customize(new AutoMoqCustomization());
+                var paymentSequence = new MockSequence();
+                var paymentService = new Mock<IPaymentService>();
+                paymentService.InSequence(paymentSequence).Setup(m => m.StartPayment());
+                paymentService.Setup(m => m.GetBalance()).Returns(Person.SubscriptionFee + 100); // > subscription fee
+                paymentService.InSequence(paymentSequence).Setup(m => m.SpecifyAmount(Person.SubscriptionFee));
+                paymentService.InSequence(paymentSequence).Setup(m => m.ConfirmPayment());
+                fixture.Inject(paymentService);
 
-            var paymentSequence = new MockSequence();
-            var paymentService = new Mock<IPaymentService>();
-            paymentService.InSequence(paymentSequence).Setup(m => m.StartPayment());
-            paymentService.InSequence(paymentSequence).Setup(m => m.SpecifyAmount(Person.SubscriptionFee));
-            paymentService.InSequence(paymentSequence).Setup(m => m.ConfirmPayment());
-            fixture.Inject(paymentService);
+                return fixture;
+            })
+        { }
+    }
 
-            //fixture.Register<IPaymentService>(() => new TestPaymentService());
+    internal class InsufficientBalancePersonCreationAutodataAttribute : AutoDataAttribute
+    {
+        public InsufficientBalancePersonCreationAutodataAttribute()
+            : base(() =>
+            {
+                var fixture = new Fixture();
 
-            double top = 20;
-            double bottom = -11;
-            fixture.Customize<double>(c => c.FromFactory(() => new Random().NextDouble() * (top - (bottom)) + bottom));
-            return fixture;
-        })
+                fixture.Customize(new AutoMoqCustomization());
+                var paymentSequence = new MockSequence();
+                var paymentService = new Mock<IPaymentService>();
+                paymentService.InSequence(paymentSequence).Setup(m => m.StartPayment());
+                paymentService.Setup(m => m.GetBalance()).Returns(Person.SubscriptionFee - 100); // < subscription fee
+                paymentService.InSequence(paymentSequence).Setup(m => m.Cancel());
+                fixture.Inject(paymentService);
+
+                return fixture;
+            })
         { }
     }
 }

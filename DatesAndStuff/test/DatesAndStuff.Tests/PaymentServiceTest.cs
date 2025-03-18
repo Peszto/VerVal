@@ -158,22 +158,40 @@ namespace DatesAndStuff.Tests
             paymentService.Verify(m => m.Cancel(), Times.Once);
         }
 
-
-
         [Test]
-        [CustomPersonCreationAutodataAttribute]
-        public void TestPaymentService_MockWithAutodata(Person sut, Mock<IPaymentService> paymentService)
+        [SufficientBalancePersonCreationAutodataAttribute]
+        public void TestPaymentService_MockWithAutodata_SufficientBalance(Person sut, Mock<IPaymentService> paymentService)
         {
             // Arrange
-
+            
             // Act
             bool result = sut.PerformSubscriptionPayment();
-
+            
             // Assert
             result.Should().BeTrue();
             paymentService.Verify(m => m.StartPayment(), Times.Once);
+            paymentService.Verify(m => m.GetBalance(), Times.Once);
             paymentService.Verify(m => m.SpecifyAmount(Person.SubscriptionFee), Times.Once);
             paymentService.Verify(m => m.ConfirmPayment(), Times.Once);
+            paymentService.Verify(m => m.Cancel(), Times.Never);
+        }
+        
+        [Test]
+        [InsufficientBalancePersonCreationAutodataAttribute]
+        public void TestPaymentService_MockWithAutodata_InsufficientBalance(Person sut, Mock<IPaymentService> paymentService)
+        {
+            // Arrange
+            
+            // Act
+            bool result = sut.PerformSubscriptionPayment();
+            
+            // Assert
+            result.Should().BeFalse();
+            paymentService.Verify(m => m.StartPayment(), Times.Once);
+            paymentService.Verify(m => m.GetBalance(), Times.Once);
+            paymentService.Verify(m => m.SpecifyAmount(It.IsAny<double>()), Times.Never);
+            paymentService.Verify(m => m.ConfirmPayment(), Times.Never);
+            paymentService.Verify(m => m.Cancel(), Times.Once);
         }
     }
 }
