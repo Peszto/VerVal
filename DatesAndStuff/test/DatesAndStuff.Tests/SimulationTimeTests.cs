@@ -218,13 +218,13 @@ namespace DatesAndStuff.Tests
             {
                 // Arrange
                 var dateTime = DateTime.UtcNow;
-                var originalTime = new SimulationTime(dateTime); // Assuming TotalMilliseconds is set to 1000
+                var originalTime = new SimulationTime(dateTime);
 
                 // Act
                 var nextLogicalTick = originalTime.NextLogicalTick;
 
                 // Assert
-                nextLogicalTick.TotalMilliseconds.Should().Be(originalTime.TotalMilliseconds + 1);
+                nextLogicalTick.LogicalTicks.Should().Be(originalTime.LogicalTicks + 1);
             }
 
             [Test]
