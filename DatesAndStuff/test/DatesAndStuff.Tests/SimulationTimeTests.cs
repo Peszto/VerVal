@@ -9,23 +9,23 @@ namespace DatesAndStuff.Tests
         {
             //
         }
-        
+
         [SetUp]
         public void Setup()
         {
             // minden teszt felteheti, hogy előtte lefutott ez
         }
-        
+
         [TearDown]
         public void TearDown()
         {
         }
-        
+
         [OneTimeTearDown]
         public void OneTimeTearDown()
         {
         }
-        
+
         public class ConstructorTests
         {
             [Test]
@@ -40,7 +40,7 @@ namespace DatesAndStuff.Tests
                 result.Should().NotBe(DateTime.Now);
             }
         }
-        
+
         public class ComparisonTests
         {
             [Test]
@@ -61,7 +61,7 @@ namespace DatesAndStuff.Tests
                 var time2 = new SimulationTime(new DateTime(2023, 1, 1, 12, 0, 0));
                 var time3 = new SimulationTime(new DateTime(2023, 1, 1, 13, 0, 0));
                 var time4 = new SimulationTime(new DateTime(2023, 1, 1, 11, 0, 0));
-                
+
                 // Act & Assert
                 Assert.AreEqual(time1, time2, "Expected time1 to be equal to time2");
                 Assert.AreNotEqual(time1, time3, "Expected time1 to not be equal to time3");
@@ -75,7 +75,7 @@ namespace DatesAndStuff.Tests
                 Assert.AreEqual(SimulationTime.MinValue, SimulationTime.MinValue, "Expected MinValue to be equal to itself");
             }
         }
-        
+
         public class TimeSpanArithmeticTests
         {
             [Test]
@@ -115,7 +115,7 @@ namespace DatesAndStuff.Tests
                 resultTimeSpan.Should().Be(TimeSpan.FromMilliseconds(500));
             }
         }
-        
+
         public class SubtractionTests
         {
             [Test]
@@ -133,7 +133,7 @@ namespace DatesAndStuff.Tests
                 resultTimeSpan.Should().Be(TimeSpan.FromMilliseconds(500));
             }
         }
-        
+
         public class MillisecondTests
         {
             [Test]
@@ -179,9 +179,66 @@ namespace DatesAndStuff.Tests
 
                 // Assert
                 newSimulationTime.ToAbsoluteDateTime().Should().BeCloseTo(newDateTime, TimeSpan.FromMilliseconds(1));
-           }
+            }
+
+            [Test]
+            public void SimulationTime_PreviousMillisec_DecreasesTotalMillisecondsByOne()
+            {
+                // Arrange
+                var dateTime = DateTime.UtcNow;
+                var originalTime = new SimulationTime(dateTime); // Assuming TotalMilliseconds is set to 1000
+
+                // Act
+                var previousTime = originalTime.PreviousMillisec;
+
+                // Assert
+                previousTime.TotalMilliseconds.Should().Be(originalTime.TotalMilliseconds - 1);
+            }
+
         }
-        
+
+        public class LogicalTickTests
+        {
+            [Test]
+            public void PreviousLogicalTick_ShouldDescrease_LogicalTickByOne()
+            {
+                // Arrange
+                var dateTime = DateTime.UtcNow;
+                var originalTime = new SimulationTime(dateTime); // Assuming TotalMilliseconds is set to 1000
+
+                // Act
+                var previousLogicalTick = originalTime.PreviousLogicalTick;
+
+                // Assert
+                previousLogicalTick.TotalMilliseconds.Should().Be(originalTime.TotalMilliseconds - 1);
+            }
+
+            [Test]
+            public void NextLogicalTick_ShouldIncrease_LogicalTickByOne()
+            {
+                // Arrange
+                var dateTime = DateTime.UtcNow;
+                var originalTime = new SimulationTime(dateTime); // Assuming TotalMilliseconds is set to 1000
+
+                // Act
+                var nextLogicalTick = originalTime.NextLogicalTick;
+
+                // Assert
+                nextLogicalTick.TotalMilliseconds.Should().Be(originalTime.TotalMilliseconds + 1);
+            }
+
+            [Test]
+            public void LogicalTick_ShouldBeEqual_WhenSameTime()
+            {
+                // Arrange
+                long rawTicks = 9876543210;
+                var time = SimulationTime.FromLogicalTicks(rawTicks);
+
+                // Act & Assert
+                time.LogicalTicks.Should().Be(rawTicks);
+            }
+        }
+
         public class TimeManipulationTests
         {
             [Test]
@@ -191,7 +248,7 @@ namespace DatesAndStuff.Tests
                 // Arrange
                 var simulationTime = SimulationTime.MinValue;
                 int secondsToAdd = 5;
-                
+
                 // Act
                 var newSimulationTime = simulationTime.AddSeconds(secondsToAdd);
 
@@ -213,8 +270,77 @@ namespace DatesAndStuff.Tests
                 // Assert
                 newSimulationTime.TotalMilliseconds.Should().Be((long)(simulationTime.TotalMilliseconds + timeSpanToAdd.TotalMilliseconds));
             }
+
+            [Test]
+            public void AddMinutes_ShouldIncreaseSimulationTimeByMinutes()
+            {
+                // Arrange
+                var initialTime = new SimulationTime(new DateTime(2025, 1, 1, 12, 0, 0)); // Jan 1, 2025 12:00:00
+                var expectedTime = initialTime.ToAbsoluteDateTime().AddMinutes(15);
+
+                // Act
+                var result = initialTime.AddMinutes(15);
+
+                // Assert
+                result.ToAbsoluteDateTime().Should().Be(expectedTime);
+            }
+
+            [Test]
+            public void AddHours_ShouldIncreaseSimulationTimeByHours()
+            {
+                // Arrange
+                var initialTime = new SimulationTime(new DateTime(2025, 1, 1, 12, 0, 0)); // Jan 1, 2025 12:00:00
+                var expectedTime = initialTime.ToAbsoluteDateTime().AddHours(5);
+
+                // Act
+                var result = initialTime.AddHours(5);
+
+                // Assert
+                result.ToAbsoluteDateTime().Should().Be(expectedTime);
+            }
+
+            [Test]
+            public void AddDays_ShouldIncreaseSimulationTimeByDays()
+            {
+                // Arrange
+                var initialTime = new SimulationTime(new DateTime(2025, 1, 1, 12, 0, 0)); // Jan 1, 2025 12:00:00
+                var expectedTime = initialTime.ToAbsoluteDateTime().AddDays(10);
+
+                // Act
+                var result = initialTime.AddDays(10);
+
+                // Assert
+                result.ToAbsoluteDateTime().Should().Be(expectedTime);
+            }
+
+            [Test]
+            public void AddTimeSpan_ShouldIncreaseSimulationTimeByTimeSpan()
+            {
+                // Arrange
+                var original = new SimulationTime(new DateTime(2025, 12, 25, 14, 45, 30)); // Dec 25, 2025 14:45:30
+                var expected = new DateTime(2025, 12, 25, 0, 0, 0); // Midnight
+
+                // Act
+                var result = original.LastMidnight();
+
+                // Assert
+                result.ToAbsoluteDateTime().Should().Be(expected);
+            }
+
+            [Test]
+            public void LastMidnight_Of_Already_Midnight_Time_Should_Not_Change()
+            {
+                // Arrange
+                var midnight = new SimulationTime(new DateTime(2025, 10, 5, 0, 0, 0)); // Already midnight
+
+                // Act
+                var result = midnight.LastMidnight();
+
+                // Assert
+                result.Should().Be(midnight);
+            }
         }
-        
+
         public class StringRepresentationTests
         {
             [Test]
