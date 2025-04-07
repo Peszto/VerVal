@@ -2,9 +2,9 @@ root = true
 
 [*.cs]
 # Kódstílus szabályok
-dotnet_diagnostic.IDE0005.severity = warning   # Felesleges using direktíva
-dotnet_diagnostic.IDE0051.severity = warning    # nem használt privát tag
-dotnet_diagnostic.CS0168.severity = warning     # nem használt változó
+dotnet_diagnostic.IDE0005.severity = error   # Felesleges using direktíva
+dotnet_diagnostic.IDE0051.severity = error    # nem használt privát tag
+dotnet_diagnostic.CS0168.severity = error     # nem használt változó
 
 # Formázási szabályok
 indent_style = space
