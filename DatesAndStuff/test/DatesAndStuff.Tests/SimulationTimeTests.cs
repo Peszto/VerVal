@@ -39,6 +39,67 @@ namespace DatesAndStuff.Tests
                 // Assert
                 result.Should().NotBe(DateTime.Now);
             }
+
+            [Test]
+            // Constructor with DateTime sets the time correctly.
+            public void ConstructorWithDateTime_SetsTimeCorrectly()
+            {
+                // Arrange
+                var dateTime = new DateTime(2025, 1, 1, 12, 0, 0);
+                var sut = new SimulationTime(dateTime);
+                // Act
+                var result = sut.ToAbsoluteDateTime();
+                // Assert
+                result.Should().Be(dateTime);
+            }
+
+            [Test]
+            // Constructor with year, month, day sets the time correctly.
+            public void ConstructorWithYearMonthDay_SetsTimeCorrectly()
+            {
+                // Arrange
+                var year = 2025;
+                var month = 1;
+                var day = 1;
+                var sut = new SimulationTime(year, month, day);
+                // Act
+                var result = sut.ToAbsoluteDateTime();
+                // Assert
+                result.Should().Be(new DateTime(year, month, day));
+            }
+
+            [Test]
+            // Constructor with year, month, day, hour, minute, second sets the time correctly.
+            public void ConstructorWithFullDateTime_SetsTimeCorrectly()
+            {
+                // Arrange
+                var year = 2025;
+                var month = 1;
+                var day = 1;
+                var hour = 12;
+                var minute = 0;
+                var second = 0;
+                var sut = new SimulationTime(year, month, day, hour, minute, second);
+                // Act
+                var result = sut.ToAbsoluteDateTime();
+                // Assert
+                result.Should().Be(new DateTime(year, month, day, hour, minute, second));
+            }
+
+            [Test]
+            public void Constructor_WithStringLogicalTicks_ShouldInitializeCorrectly()
+            {
+                // Arrange
+                var logicalTickStr = "638796540511300000";
+                var expectedTicks = long.Parse(logicalTickStr);
+
+                // Act
+                var simTime = new SimulationTime(logicalTickStr);
+
+                // Assert
+                simTime.LogicalTicks.Should().Be(expectedTicks);
+            }
+
         }
 
         public class ComparisonTests
@@ -63,8 +124,8 @@ namespace DatesAndStuff.Tests
                 var time4 = new SimulationTime(new DateTime(2023, 1, 1, 11, 0, 0));
 
                 // Act & Assert
-                Assert.AreEqual(time1, time2, "Expected time1 to be equal to time2");
-                Assert.AreNotEqual(time1, time3, "Expected time1 to not be equal to time3");
+                Assert.IsTrue(time1 == time2, "Expected time1 to be equal to time2");
+                Assert.IsTrue(time1 != time3, "Expected time1 to not be equal to time3");
                 Assert.IsTrue(time1 < time3, "Expected time1 to be less than time3");
                 Assert.IsTrue(time3 > time1, "Expected time3 to be greater than time1");
                 Assert.IsTrue(time4 <= time1, "Expected time4 to be less than or equal to time1");
@@ -74,6 +135,55 @@ namespace DatesAndStuff.Tests
                 Assert.AreEqual(SimulationTime.MaxValue, SimulationTime.MaxValue, "Expected MaxValue to be equal to itself");
                 Assert.AreEqual(SimulationTime.MinValue, SimulationTime.MinValue, "Expected MinValue to be equal to itself");
             }
+
+
+            [Test]
+            public void Min_WithMultipleSimulationTimes_ShouldReturnMinimum()
+            {
+                // Arrange
+                var t1 = new SimulationTime(2023, 1, 1);
+                var t2 = new SimulationTime(2022, 1, 1);
+                var t3 = new SimulationTime(2024, 1, 1);
+
+                // Act
+                var result = SimulationTime.Min(t1, t2, t3);
+
+                // Assert
+                result.Should().Be(t2);
+            }
+
+            [Test]
+            public void Min_WithSpan_ShouldReturnMinimum()
+            {
+                // Arrange
+                var times = new[]
+                {
+                    new SimulationTime(2023, 6, 1),
+                    new SimulationTime(2023, 1, 1),
+                    new SimulationTime(2023, 3, 1),
+                };
+
+                // Act
+                var result = SimulationTime.Min(times.AsSpan());
+
+                // Assert
+                result.Should().Be(times[1]);
+            }
+
+            [Test]
+            public void Max_WithTwoSimulationTimes_ShouldReturnMaximum()
+            {
+                // Arrange
+                var earlier = new SimulationTime(2021, 1, 1);
+                var later = new SimulationTime(2023, 1, 1);
+
+                // Act
+                var result = SimulationTime.Max(earlier, later);
+
+                // Assert
+                result.Should().Be(later);
+            }
+
         }
 
         public class TimeSpanArithmeticTests
@@ -193,6 +303,20 @@ namespace DatesAndStuff.Tests
 
                 // Assert
                 previousTime.TotalMilliseconds.Should().Be(originalTime.TotalMilliseconds - 1);
+            }
+
+            [Test]
+            public void Now_ShouldBeCloseToCurrentSystemTime()
+            {
+                // Arrange
+                var systemNow = DateTime.Now;
+
+                // Act
+                var simTime = SimulationTime.Now;
+                var simNow = simTime.ToAbsoluteDateTime();
+
+                // Assert
+                simNow.Should().BeCloseTo(systemNow, precision: TimeSpan.FromMilliseconds(10));
             }
 
         }
