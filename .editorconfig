@@ -1,0 +1,15 @@
+root = true
+
+[*.cs]
+# Kódstílus szabályok
+dotnet_diagnostic.IDE0005.severity = warning   # Felesleges using direktíva
+dotnet_diagnostic.IDE0051.severity = warning    # nem használt privát tag
+dotnet_diagnostic.CS0168.severity = warning     # nem használt változó
+
+# Formázási szabályok
+indent_style = space
+indent_size = 4
+
+# Cleanup kikapcsolása
+dotnet_separate_import_directive_groups = false
+dotnet_sort_system_directives_first = false

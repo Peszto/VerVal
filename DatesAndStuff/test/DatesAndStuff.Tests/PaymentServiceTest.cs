@@ -14,6 +14,7 @@ namespace DatesAndStuff.Tests
         [Test]
         public void TestPaymentService_ManualMock_SufficientBalance()
         {
+            int balance= 600;
             // Arrange
             var testPaymentService = new TestPaymentService(600); //balance > 500
             Person sut = new Person("Test Pista",
