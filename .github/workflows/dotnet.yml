@@ -68,4 +68,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: "Code coverage report"
-        path: ./ ./TestResults/CoverageReport
+        path: ./TestResults/CoverageReport
