@@ -55,17 +55,17 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal --collect:"XPlat Code Coverage;Format=opencover" --logger trx  --results-directory ./TestResults
 
-    # - name: Install ReportGenerator
-    #   run: dotnet tool install -g dotnet-reportgenerator-globaltool
+    - name: Install ReportGenerator
+      run: dotnet tool install -g dotnet-reportgenerator-globaltool
         
-    # - name: Generate HTML report
-    #   run: reportgenerator -reports:"./TestResults/*/coverage.opencover.xml" -targetdir:"./TestResults/CoverageReport" -reporttypes:Html
+    - name: Generate HTML report
+      run: reportgenerator -reports:"./TestResults/*/coverage.opencover.xml" -targetdir:"./TestResults/CoverageReport" -reporttypes:Html
     
-    # - name: List Coverage Report
-    #   run: ls -la ./TestResults/CoverageReport
+    - name: List Coverage Report
+      run: ls -la ./TestResults/CoverageReport
 
-    # - name: Upload coverage report as artifact
-    #   uses: actions/upload-artifact@v4
-    #   with:
-    #     name: "Code coverage report"
-    #     path: ./Szeminarium/Minta/3. szemi/VerVal/TestResults/CoverageReport
+    - name: Upload coverage report as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: "Code coverage report"
+        path: ./ ./TestResults/CoverageReport
