@@ -3,7 +3,7 @@
 3 - ba5b5a3 - elesik a yml
 3* - 706298b2cc0879e01c386a8117bf0cd98e48dd3c
 4 - 0e30430
-5 - dafbb61
+5 - 24df6a6
 6 - 
 7 -
 8 - https://community.sonarsource.com/t/my-first-analyses-has-failed-when-added-project-analysis-id-38152260-0ab1-4a18-846f-1f2371079b5f/134798/29
