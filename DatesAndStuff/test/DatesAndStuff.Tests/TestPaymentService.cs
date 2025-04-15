@@ -1,61 +1,43 @@
-﻿// Updated TestPaymentService implementation
-using DatesAndStuff;
-
-internal class TestPaymentService : IPaymentService
+﻿namespace DatesAndStuff.Tests
 {
-    uint startCallCount = 0;
-    uint specifyCallCount = 0;
-    uint confirmCallCount = 0;
-    uint cancelCallCount = 0;
-    private double balance = 1000; 
-
-    public bool StartCalled => startCallCount > 0;
-    public bool SpecifyCalled => specifyCallCount > 0;
-    public bool ConfirmCalled => confirmCallCount > 0;
-    public bool CancelCalled => cancelCallCount > 0;
-
-    public TestPaymentService(double balance)
+    internal class TestPaymentService : IPaymentService
     {
-        this.balance = balance;
-    }
+        uint startCallCount = 0;
+        uint specifyCallCount = 0;
+        uint confirmCallCount = 0;
 
-    public void StartPayment()
-    {
-        if (startCallCount != 0 || specifyCallCount > 0 || confirmCallCount > 0 || cancelCallCount > 0)
-            throw new Exception();
-        startCallCount++;
-    }
+        public void StartPayment()
+        {
+            if (startCallCount != 0 || specifyCallCount > 0 || confirmCallCount > 0)
+                throw new Exception();
 
-    public void SpecifyAmount(double amount)
-    {
-        if (startCallCount != 1 || specifyCallCount > 0 || confirmCallCount > 0 || cancelCallCount > 0)
-            throw new Exception();
-        specifyCallCount++;
-        balance -= amount;
-    }
+            startCallCount++;
+        }
 
-    public void ConfirmPayment()
-    {
-        if (startCallCount != 1 || specifyCallCount != 1 || confirmCallCount > 0 || cancelCallCount > 0)
-            throw new Exception();
-        confirmCallCount++;
-    }
+        public double Balance
+        {
+            get { return 750; }
+        }
 
-    public void Cancel()
-    {
-        if (startCallCount != 1 || cancelCallCount > 0 || confirmCallCount > 0)
-            throw new Exception();
-        cancelCallCount++;
-    }
+        public void SpecifyAmount(double amount)
+        {
+            if (startCallCount != 1 || specifyCallCount > 0 || confirmCallCount > 0)
+                throw new Exception();
 
-    public double GetBalance()
-    {
-        return balance;
-    }
+            specifyCallCount++;
+        }
 
-    public bool SuccessFul()
-    {
-        return (startCallCount == 1 && specifyCallCount == 1 && confirmCallCount == 1) ||
-               (startCallCount == 1 && cancelCallCount == 1);
+        public void ConfirmPayment()
+        {
+            if (startCallCount != 1 || specifyCallCount != 1 || confirmCallCount > 0)
+                throw new Exception();
+
+            confirmCallCount++;
+        }
+
+        public bool SuccessFul()
+        {
+            return startCallCount == 1 && specifyCallCount == 1 && confirmCallCount == 1;
+        }
     }
 }

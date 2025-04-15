@@ -75,12 +75,6 @@ namespace DatesAndStuff
         public bool PerformSubscriptionPayment()
         {
             PreferredPayment.StartPayment();
-            double currentBalance = PreferredPayment.GetBalance();
-            if (currentBalance < SubscriptionFee)
-            {
-                PreferredPayment.Cancel();
-                return false;
-            }
             PreferredPayment.SpecifyAmount(SubscriptionFee);
             PreferredPayment.ConfirmPayment();
             return true;
