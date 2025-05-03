@@ -146,6 +146,10 @@ namespace DatesAndStuff.Web.Tests
             // Go to Person page
             wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//*[@data-test='PersonPageNavigation']"))).Click();
 
+            wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//*[@data-test='DisplayedSalary']")));
+            var initialSalaryText = driver.FindElement(By.XPath("//*[@data-test='DisplayedSalary']")).Text;
+            double initialSalary = double.Parse(initialSalaryText);
+
             // Wait for and fill in the input
             wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//*[@data-test='SalaryIncreasePercentageInput']")));
             var input = driver.FindElement(By.XPath("//*[@data-test='SalaryIncreasePercentageInput']"));
@@ -162,6 +166,12 @@ namespace DatesAndStuff.Web.Tests
             // Wait for field-level error message
             var fieldError = wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//*[@data-test='SalaryIncreasePercentageInputError']")));
             fieldError.Text.Should().Be("The specified percentage should be between -10 and infinity.");
+
+            var currentSalaryText = driver.FindElement(By.XPath("//*[@data-test='DisplayedSalary']")).Text;
+            double currentSalary = double.Parse(currentSalaryText);
+
+            // Salary should not change when validation fails
+            currentSalary.Should().Be(initialSalary);
         }
 
 
