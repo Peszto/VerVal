@@ -71,7 +71,7 @@
     public class FormModel
     {
         [Required(ErrorMessage = "Percentage should be specified")]
-        [Range(-10d, Double.MaxValue, ErrorMessage = "The specified percentage should be between -10 and infinity.")]
+        [Range(-10d+0.00001, Double.MaxValue, ErrorMessage = "The specified percentage should be between -10 and infinity.")]
         public double SalaryIncreasePercentage { get; set; } = 0;
     }
 }

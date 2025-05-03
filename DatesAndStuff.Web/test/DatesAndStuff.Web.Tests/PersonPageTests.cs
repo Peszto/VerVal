@@ -154,7 +154,7 @@ namespace DatesAndStuff.Web.Tests
             wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//*[@data-test='SalaryIncreasePercentageInput']")));
             var input = driver.FindElement(By.XPath("//*[@data-test='SalaryIncreasePercentageInput']"));
             input.Clear();
-            input.SendKeys("-15");
+            input.SendKeys("-10");
 
             // Submit the form
             wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//*[@data-test='SalaryIncreaseSubmitButton']"))).Click();
