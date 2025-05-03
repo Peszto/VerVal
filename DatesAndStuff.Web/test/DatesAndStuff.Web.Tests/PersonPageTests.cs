@@ -136,39 +136,35 @@ namespace DatesAndStuff.Web.Tests
         }
 
 
-
         [Test]
         public void Person_SalaryIncrease_ShouldShowValidationErrors_WhenBelowMinusTen()
         {
             // Arrange
-
             driver.Navigate().GoToUrl(BaseURL);
-            driver.FindElement(By.XPath("//*[@data-test='PersonPageNavigation']")).Click();
-            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
 
-            var input = wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//*[@data-test='SalaryIncreasePercentageInput']")));
+            // Go to Person page
+            wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//*[@data-test='PersonPageNavigation']"))).Click();
+
+            // Wait for and fill in the input
+            wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//*[@data-test='SalaryIncreasePercentageInput']")));
+            var input = driver.FindElement(By.XPath("//*[@data-test='SalaryIncreasePercentageInput']"));
             input.Clear();
             input.SendKeys("-15");
 
-            // Act
-            var submitButton = wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//*[@data-test='SalaryIncreaseSubmitButton']")));
-            submitButton.Click();
+            // Submit the form
+            wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//*[@data-test='SalaryIncreaseSubmitButton']"))).Click();
 
-            // Assert
-            // wait.Until(driver =>
-            // {
-            //     var summary = wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//*[@data-test='ValidationSummary']")));
-            //     summary.Text.Should().NotBeNullOrEmpty();
-            //     return summary.Text.Should().Contain("The specified percentage should be between -10 and infinity."); 
-            // });
+            // Wait for the validation summary to appear
+            var summaryElement = wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//*[@data-test='ValidationSummary']")));
+            summaryElement.Text.Should().Contain("The specified percentage should be between -10 and infinity.");
 
-            if (!IsElementPresent(By.XPath("//*[@data-test='SalaryIncreasePercentagInputError']")))
-            {
-                Thread.Sleep(1000); // Wait for the element to be present
-            }
-            var errorMessageElement = wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//*[@data-test='SalaryIncreasePercentageInputError']")));
-            Assert.That(errorMessageElement.Text, Is.EqualTo("The specified percentage should be between -10 and infinity."));
+            // Wait for field-level error message
+            var fieldError = wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//*[@data-test='SalaryIncreasePercentageInputError']")));
+            fieldError.Text.Should().Be("The specified percentage should be between -10 and infinity.");
         }
+
+
         private bool IsElementPresent(By by)
         {
             try
