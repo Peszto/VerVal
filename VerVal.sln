@@ -16,6 +16,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatesAndStuff.Web", "DatesA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatesAndStuff.Web.Tests", "DatesAndStuff.Web\test\DatesAndStuff.Web.Tests\DatesAndStuff.Web.Tests.csproj", "{3D0F5EE0-770D-49FE-85C1-C02A570A8A34}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WizzAirTests", "WizzAirTests\WizzAirTests.csproj", "{B7A9DE1B-59B2-4B75-9934-5B1D56B45BD3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +40,10 @@ Global
 		{3D0F5EE0-770D-49FE-85C1-C02A570A8A34}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D0F5EE0-770D-49FE-85C1-C02A570A8A34}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3D0F5EE0-770D-49FE-85C1-C02A570A8A34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7A9DE1B-59B2-4B75-9934-5B1D56B45BD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7A9DE1B-59B2-4B75-9934-5B1D56B45BD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7A9DE1B-59B2-4B75-9934-5B1D56B45BD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7A9DE1B-59B2-4B75-9934-5B1D56B45BD3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
