@@ -41,10 +41,17 @@ namespace DatesAndStuff.Mobile.Tests
             // Release builds have Fast Deployment disabled
             // https://learn.microsoft.com/xamarin/android/deploy-test/building-apps/build-process#fast-deployment
             androidOptions.AddAdditionalAppiumOption(MobileCapabilityType.NoReset, "true");
-            androidOptions.AddAdditionalAppiumOption(AndroidMobileCapabilityType.AppPackage, "com.BBTE.VerVal");
+            // for bbte
+            // androidOptions.AddAdditionalAppiumOption(AndroidMobileCapabilityType.AppPackage, "com.BBTE.VerVal");
 
-            //Make sure to set [Register("com.companyname.basicappiumsample.MainActivity")] on the MainActivity of your android application
-            androidOptions.AddAdditionalAppiumOption(AndroidMobileCapabilityType.AppActivity, $"com.BBTE.VerVal.MainActivity");
+            // //Make sure to set [Register("com.companyname.basicappiumsample.MainActivity")] on the MainActivity of your android application
+            // androidOptions.AddAdditionalAppiumOption(AndroidMobileCapabilityType.AppActivity, $"com.BBTE.VerVal.MainActivity");
+
+            //for emag
+            androidOptions.AddAdditionalAppiumOption(AndroidMobileCapabilityType.AppPackage, "ro.emag.android");
+            androidOptions.AddAdditionalAppiumOption(AndroidMobileCapabilityType.AppActivity, "ro.emag.android.splash.SplashActivity");
+
+
             // END DEBUG BUILD SETUP
 
             // Specifying the avd option will boot the emulator for you
