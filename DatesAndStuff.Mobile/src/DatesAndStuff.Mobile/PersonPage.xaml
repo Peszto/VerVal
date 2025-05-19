@@ -23,6 +23,7 @@
             <Label Text="Salary:" FontSize="18" />
             <Label Text="{Binding Person.Salary}"
                    x:Name="DisplayedSalary"
+                   AutomationId="DisplayedSalary"
                    FontSize="18" 
                    TextColor="DarkGreen" />
 
@@ -30,16 +31,19 @@
             <Entry Placeholder="Enter a percentage value"
                    Keyboard="Numeric"
                    Text="{Binding SalaryIncreasePercentage, Mode=TwoWay}"
+                   AutomationId="SalaryIncreasePercentageInput"
                    x:Name="SalaryIncreasePercentageInput" />
             <Label Text="{Binding SalaryIncreasePercentageValidationMessage}" 
                    TextColor="Red"
+                   AutomationId="SalaryIncreasePercentageValidationMessage"
                    IsVisible="{Binding HasValidationErrors}" />
-
+                   
             <Button Text="Submit"
                     Command="{Binding SubmitCommand}"
                     x:Name="SalaryIncreaseSubmitButton"
                     BackgroundColor="CornflowerBlue"
                     TextColor="White"
+                    AutomationId="SalaryIncreaseSubmitButton"
                     IsEnabled="{Binding HasValidationErrors, Converter={StaticResource InverseBoolConverter}}"/>
         </VerticalStackLayout>
     </ScrollView>

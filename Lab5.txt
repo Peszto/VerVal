@@ -1,3 +1,6 @@
 1 - 
 2 - 
 3 - 
+
+
+dotnet build -t:Run -f net8.0-android -p:AndroidSdkDirectory="/Users/eszti/Library/Android/sdk" -p:AndroidEmulator="emulator-5554"
