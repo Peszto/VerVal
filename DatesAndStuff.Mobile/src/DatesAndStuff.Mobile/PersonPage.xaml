@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DatesAndStuff.Mobile.PersonPage"
+             xmlns:local="clr-namespace:DatesAndStuff.Mobile"
+             Title="PersonPage">
+
+    <ContentPage.BindingContext>
+        <local:PersonViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <local:InverseBoolConverter x:Key="InverseBoolConverter"/>
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <Label Text="{Binding Person.Name}" 
+                   FontSize="24" 
+                   FontAttributes="Bold" />
+
+            <Label Text="Salary:" FontSize="18" />
+            <Label Text="{Binding Person.Salary}"
+                   x:Name="DisplayedSalary"
+                   FontSize="18" 
+                   TextColor="DarkGreen" />
+
+            <Label Text="Salary increase percentage:" FontSize="18" />
+            <Entry Placeholder="Enter a percentage value"
+                   Keyboard="Numeric"
+                   Text="{Binding SalaryIncreasePercentage, Mode=TwoWay}"
+                   x:Name="SalaryIncreasePercentageInput" />
+            <Label Text="{Binding SalaryIncreasePercentageValidationMessage}" 
+                   TextColor="Red"
+                   IsVisible="{Binding HasValidationErrors}" />
+
+            <Button Text="Submit"
+                    Command="{Binding SubmitCommand}"
+                    x:Name="SalaryIncreaseSubmitButton"
+                    BackgroundColor="CornflowerBlue"
+                    TextColor="White"
+                    IsEnabled="{Binding HasValidationErrors, Converter={StaticResource InverseBoolConverter}}"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
