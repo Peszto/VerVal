@@ -1,6 +1,6 @@
-1 - 
-2 - 
-3 - 
+1 - 32a6c645470143686ddc7e4d27f6b13ba9491e2e
+2 - 2a807074c2bd96959adc5879617196ed983a9cb2
+3 - daf668b9e9e77e47c9678a96029d6642fa9a2716
 
 
 dotnet build -t:Run -f net8.0-android -p:AndroidSdkDirectory="/Users/eszti/Library/Android/sdk" -p:AndroidEmulator="emulator-5554"
