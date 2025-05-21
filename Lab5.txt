@@ -4,3 +4,20 @@
 
 
 dotnet build -t:Run -f net8.0-android -p:AndroidSdkDirectory="/Users/eszti/Library/Android/sdk" -p:AndroidEmulator="emulator-5554"
+
+
+appium
+
+emulator -avd Pixel_API_33_ARM
+
+{
+  "platformName": "Android",
+  "appium:automationName": "UIAutomator2",
+  "appium:deviceName": "Pixel_API_33_ARM",
+  "appium:appPackage": "com.BBTE.VerVal",
+  "appium:appActivity": "com.BBTE.VerVal.MainActivity",
+  "appium:noReset": true,
+  "appium:ensureWebviewsHavePages": true,
+  "appium:newCommandTimeout": 3600,
+  "appium:connectHardwareKeyboard": true
+}

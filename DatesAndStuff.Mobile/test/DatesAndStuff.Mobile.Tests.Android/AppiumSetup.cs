@@ -49,7 +49,7 @@ namespace DatesAndStuff.Mobile.Tests
 
             //for emag
             androidOptions.AddAdditionalAppiumOption(AndroidMobileCapabilityType.AppPackage, "ro.emag.android");
-            androidOptions.AddAdditionalAppiumOption(AndroidMobileCapabilityType.AppActivity, "ro.emag.android.splash.SplashActivity");
+            androidOptions.AddAdditionalAppiumOption(AndroidMobileCapabilityType.AppActivity, "ro.emag.android.cleancode.app.ActivityStart");
 
 
             // END DEBUG BUILD SETUP
